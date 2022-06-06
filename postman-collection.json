@@ -1,0 +1,311 @@
+{
+	"info": {
+		"_postman_id": "91aa5c27-5786-40f8-a8ee-a334eeede44a",
+		"name": "istio-oauth-poc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setGlobalVariable(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "authorization.com",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Email\": \"admin@istio-auth-poc.io\",\n    \"Password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://authorization.com:8080/auth/login",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					},
+					{
+						"key": "Host",
+						"value": "authorization.com",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://authorization.com:8080/admin/users",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Roles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					},
+					{
+						"key": "Host",
+						"value": "authorization.com",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://authorization.com:8080/admin/roles?Authorization=Bearer {{token}}&x-bla=Admin",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"roles"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{token}}"
+						},
+						{
+							"key": "x-bla",
+							"value": "Admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Role",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"ReadWrite\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://authorization.com:8080/admin/role",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Role",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					},
+					{
+						"key": "Host",
+						"value": "authorization.com",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserID\": 1,\n    \"RoleID\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://authorization.com:8080/admin/role/delete",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"role",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assign Role",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					},
+					{
+						"key": "Host",
+						"value": "authorization.com",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserID\": 1,\n    \"RoleID\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://authorization.com:8080/admin/role/assign",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"role",
+						"assign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get JWK",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://authorization.com:8080/jwk?Host=authorization.com",
+					"protocol": "http",
+					"host": [
+						"authorization",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"jwk"
+					],
+					"query": [
+						{
+							"key": "Host",
+							"value": "authorization.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get SampleSvc",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "default"
+					},
+					{
+						"key": "Host",
+						"value": "samplesvc.com",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://samplesvc.com:8080/",
+					"protocol": "http",
+					"host": [
+						"samplesvc",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

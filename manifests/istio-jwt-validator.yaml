@@ -1,0 +1,9 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: "jwt-validator"
+  namespace: default
+spec:
+  jwtRules:
+    - issuer: "istio-auth-poc"
+      jwksUri: "http://authorization.default.svc.cluster.local:4000/jwk"

@@ -1,0 +1,44 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: samplesvc-issuer-enforcer
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: samplesvc
+      version: v1
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["*"]
+      to:
+        - operation:
+            methods: ["*"]
+      when:
+        - key: request.auth.claims[Roles]
+          values: ["Admin", "ReadWrite", "ReadOnly"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: admin-role-enforcer
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: authorization
+  action: DENY
+  rules:
+    - from:
+        - source:
+            principals: ["*"]
+      to:
+        - operation:
+            methods: ["*"]
+            paths: ["/admin*"]
+      when:
+        - key: request.auth.claims[Roles]
+          notValues: ["Admin"]
+

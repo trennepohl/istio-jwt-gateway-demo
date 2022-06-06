@@ -1,0 +1,6 @@
+.idea
+**/.idea
+**/private-key.pem
+**/public-key.pem
+.DS_Store
+kubeconfig
